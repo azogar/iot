@@ -73,7 +73,7 @@ myresource_handler(void* request, void* response, uint8_t *buffer, uint16_t pref
 {
   REST.set_header_content_type(response, REST.type.TEXT_XML);
 
-  const char msg[strlen(xml_handler)+n_entrances/10];
+  const char msg[strlen(xml_handler)+n_entrances/10-1];
   snprintf(msg, sizeof(msg), xml_handler, n_entrances);
   REST.set_response_payload(response, (uint8_t *)msg, strlen(msg));
 
@@ -84,7 +84,7 @@ myresource_event_handler(resource_t *r)
 {
   PRINTF("Entrance registered\n");
   n_entrances++;
-  static char content[strlen(xml_event_handler)+n_entrances/10];
+  static char content[strlen(xml_event_handler)+n_entrances/10-1];
   
   coap_packet_t notification[1];
   coap_init_message(notification, COAP_TYPE_CON, REST.status.OK, 0 );
