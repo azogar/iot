@@ -66,7 +66,7 @@
 
 static int n_entrances = 0;
 static const char* xml_handler = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Message><Entrances>%d</Entrance></Message>";
-static const char* xml_event_handler = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Message><Type>Entrance</Type><Entrances>%d</Entrances></Message>";
+static const char* xml_event_handler = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Message><Type>Entrance</Type><Total>%d</Total></Message>";
 
 EVENT_RESOURCE(myresource, METHOD_GET, "sensors/button", "title=\"Event demo\";obs");
 
