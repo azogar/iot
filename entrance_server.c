@@ -39,6 +39,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "contiki.h"
 #include "contiki-net.h"
 
@@ -49,6 +50,7 @@
 #include "dev/button-sensor.h"
 
 #include "er-coap-13.h"
+#define MAX_NUMBER 4
 
 #define DEBUG 0
 #if DEBUG
@@ -63,7 +65,7 @@
 
 
 static int n_entrances = 0;
-static const char* xml_handler = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Message><Entrances>%d</Entrances></Message>";
+static const char* xml_handler = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Message><Entrances>%d</Entrance></Message>";
 static const char* xml_event_handler = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Message><Type>Entrance</Type><Entrances>%d</Entrances></Message>";
 
 EVENT_RESOURCE(myresource, METHOD_GET, "sensors/button", "title=\"Event demo\";obs");
@@ -73,7 +75,9 @@ myresource_handler(void* request, void* response, uint8_t *buffer, uint16_t pref
 {
   REST.set_header_content_type(response, REST.type.TEXT_XML);
 
-  const char msg[strlen(xml_handler)+n_entrances/10-1];
+  
+
+  const char msg[strlen(xml_handler)+MAX_NUMBER];
   snprintf(msg, sizeof(msg), xml_handler, n_entrances);
   REST.set_response_payload(response, (uint8_t *)msg, strlen(msg));
 
@@ -84,13 +88,13 @@ myresource_event_handler(resource_t *r)
 {
   PRINTF("Entrance registered\n");
   n_entrances++;
-  static char content[strlen(xml_event_handler)+n_entrances/10-1];
+  const char content[strlen(xml_event_handler)+MAX_NUMBER];
   
   coap_packet_t notification[1];
   coap_init_message(notification, COAP_TYPE_CON, REST.status.OK, 0 );
   coap_set_payload(notification, content, snprintf(content, sizeof(content), xml_event_handler, n_entrances));
 
-  REST.notify_subscribers(r, event_counter, notification);
+  REST.notify_subscribers(r, content, notification);
 }
 
 PROCESS(entrance_server, "Entrance Server");
