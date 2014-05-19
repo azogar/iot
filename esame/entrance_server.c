@@ -73,6 +73,15 @@ leds_handler(void* request, void* response, uint8_t *buffer, uint16_t preferred_
     success = 0;
   }
 
+  if(strcmp(mode, "on")==0 && strcmp(color, "r")==0){
+	 is_full = 1;
+	PRINTF("PIENO\n");
+}
+  if(strcmp(mode, "off")==0 && strcmp(color, "r")==0){
+ is_full = 0;
+PRINTF("VUOTO\n");
+}
+
   if (!success) {
     REST.set_response_status(response, REST.status.BAD_REQUEST);
   }
